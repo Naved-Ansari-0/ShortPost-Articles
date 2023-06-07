@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/sign_in_screen_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResetPwdScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/signInTitle"
+            android:text="Reset Password"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/transparentEditText"
+                android:hint="Email ID"
+                android:inputType="textWebEmailAddress"
+                android:id="@+id/emailResetPwd" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <android.widget.Button
+            style="@style/outlineCircularButton"
+            android:text="Send Reset Link"
+            android:layout_marginTop="30dp"
+            android:id="@+id/resetPwdButton"/>
+
+        <android.widget.Button
+            android:layout_marginTop="30dp"
+            style="@style/textButtonBlue"
+            android:text="Sign In"
+            android:id="@+id/signInButton" />
+
+    </LinearLayout>
+
+</RelativeLayout>

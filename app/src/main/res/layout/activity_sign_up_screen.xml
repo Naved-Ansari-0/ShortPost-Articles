@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sign_in_screen_gradient"
+    tools:context=".SignUpScreen">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:layout_margin="20dp"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/signInTitle"
+            android:text="SIGN UP"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/transparentEditText"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:id="@+id/nameSignUp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/transparentEditText"
+                android:hint="Email ID"
+                android:inputType="textWebEmailAddress"
+                android:id="@+id/emailSignUp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/transparentEditText"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:id="@+id/passwordSignUp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <android.widget.Button
+            style="@style/outlineCircularButton"
+            android:text="Create Account"
+            android:layout_marginTop="30dp"
+            android:id="@+id/signUpButton"/>
+
+        <android.widget.Button
+            android:layout_marginTop="30dp"
+            style="@style/textButtonBlue"
+            android:text="Forgot Password?"
+            android:id="@+id/forgotPwdButton"/>
+
+        <android.widget.Button
+            style="@style/textButtonBlue"
+            android:text="Sign In"
+            android:id="@+id/signInButton"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:textColor="@color/white"
+            android:buttonTint="@color/orange"
+            android:text="I agree to the Privacy Policy and Terms of Service."
+            android:id="@+id/agreeCheckBox"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
