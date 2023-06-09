@@ -1,10 +1,11 @@
-package com.example.login
+package com.example.login.signIn
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.login.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
@@ -35,7 +36,7 @@ class ResetPwdScreen : AppCompatActivity() {
         resetPwdButton.setOnClickListener{
             val email = emailResetPwd.text.toString()
 
-            if(!SignInSignUpUtils.checkEmail(this,email))
+            if(!SignInSignUpUtils.checkEmail(this, email))
                 return@setOnClickListener
 
             if(!SignInSignUpUtils.isInternetAvailable(this)){
@@ -53,7 +54,7 @@ class ResetPwdScreen : AppCompatActivity() {
                     }else{
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
-                        SignInSignUpUtils.firebaseExceptionToast(this,errorCode)
+                        SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
 
                     }
                 }

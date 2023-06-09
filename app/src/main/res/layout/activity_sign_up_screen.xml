@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sign_in_screen_gradient"
-    tools:context=".SignUpScreen">
+    tools:context=".signIn.SignUpScreen">
 
     <LinearLayout
         android:layout_width="match_parent"

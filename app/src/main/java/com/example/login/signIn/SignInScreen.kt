@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.signIn
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.login.HomeScreen
+import com.example.login.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
@@ -52,7 +54,8 @@ class SignInScreen : AppCompatActivity() {
             val password = passwordSignIn.text.toString().trim()
 
             if( !SignInSignUpUtils.checkEmail(this, email) ||
-                !SignInSignUpUtils.checkPassword(this,password))
+                !SignInSignUpUtils.checkPassword(this, password)
+            )
                 return@setOnClickListener
 
             if(!SignInSignUpUtils.isInternetAvailable(this)){
@@ -76,7 +79,7 @@ class SignInScreen : AppCompatActivity() {
                                     }else{
 
                                         val errorCode = (task.exception as FirebaseAuthException).errorCode
-                                        SignInSignUpUtils.firebaseExceptionToast(this,errorCode)
+                                        SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
 
                                     }
                                 }
@@ -86,13 +89,16 @@ class SignInScreen : AppCompatActivity() {
                         }
 
                         startActivity(Intent(this, HomeScreen::class.java))
-                        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+                        overridePendingTransition(
+                            R.anim.slide_in_from_right,
+                            R.anim.slide_out_to_left
+                        )
                         finishAffinity()
 
                     } else {
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
-                        SignInSignUpUtils.firebaseExceptionToast(this,errorCode)
+                        SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
 
                     }
                 }

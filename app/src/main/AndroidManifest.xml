@@ -15,22 +15,26 @@
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
         <activity
+            android:name=".Test"
+            android:exported="false" />
+        <activity
             android:name=".HomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ResetPwdScreen"
+            android:name=".signIn.ResetPwdScreen"
             android:exported="false" />
         <activity
-            android:name=".SignUpScreen"
+            android:name=".signIn.SignUpScreen"
             android:exported="false" />
         <activity
-            android:name=".SignInScreen"
+            android:name=".signIn.SignInScreen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

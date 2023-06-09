@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.signIn
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.widget.Toast
+import com.example.login.R
 
 object SignInSignUpUtils {
 
@@ -18,6 +19,10 @@ object SignInSignUpUtils {
         val namePattern = Regex("^[a-zA-Z ]+\$")
         if(!namePattern.matches(name)){
             Toast.makeText(context,"Name can only contain letters and spaces", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        if(name.length>25){
+            Toast.makeText(context,"Name too long", Toast.LENGTH_SHORT).show()
             return false
         }
         return true
@@ -100,7 +105,7 @@ object SignInSignUpUtils {
     }
 
     fun navigateToResetPwdScreen(context: Context, activity: Activity){
-        context.startActivity(Intent(context,ResetPwdScreen::class.java))
+        context.startActivity(Intent(context, ResetPwdScreen::class.java))
         activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
     }
 
