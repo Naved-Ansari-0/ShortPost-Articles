@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:padding="10dp"
+            android:background="@drawable/add_article_background">
+
+            <ImageButton
+                style="@style/imageButton"
+                android:layout_margin="5dp"
+                android:layout_gravity="right"
+                android:src="@drawable/baseline_cancel_24"
+                android:id="@+id/discardArticleButton"/>
+
+            <LinearLayout
+                style="@style/horizontalLinearLayout">
+
+                <TextView
+                    style="@style/formTextView"
+                    android:text="Title"/>
+
+                <EditText
+                    style="@style/formEditText"
+                    android:inputType="text"
+                    android:id="@+id/articleTitle"
+                    android:maxLength="100"
+                    android:hint="(Optional)"
+                    android:textColorHint="@color/gray"/>
+
+            </LinearLayout>
+
+            <TextView
+                style="@style/formTextView"
+                android:text="Content"/>
+
+            <EditText
+                style="@style/formEditText"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:id="@+id/articleText"
+                android:minLines="5"
+                android:maxLines="15"
+                android:maxLength="3000"
+                android:hint="Write an article on a topic of your interest or share your thoughts..."
+                android:textColorHint="@color/gray"/>
+
+            <LinearLayout
+                style="@style/horizontalLinearLayout">
+
+                <TextView
+                    style="@style/formTextView"
+                    android:text="Tags"/>
+
+                <EditText
+                    style="@style/formEditText"
+                    android:inputType="text"
+                    android:id="@+id/articleTags"
+                    android:hint="(Optional) Separate tags using spaces"
+                    android:textColorHint="@color/gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/horizontalLinearLayout">
+
+                <TextView
+                    style="@style/formTextView"
+                    android:text="Add an image"/>
+
+                <ImageButton
+                    style="@style/imageButton"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/baseline_photo_size_select_actual_24"
+                    android:id="@+id/addImageButton"/>
+
+                <TextView
+                    style="@style/formTextView"
+                    android:text="(Optional)"
+                    android:id="@+id/imageName"/>
+
+            </LinearLayout>
+
+            <android.widget.Button
+                style="@style/outlineCircularButton"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="10dp"
+                android:layout_margin="10dp"
+                android:textSize="12sp"
+                android:text="Submit Article"
+                android:background="@drawable/submit_button_background"
+                android:id="@+id/submitArticleButton"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

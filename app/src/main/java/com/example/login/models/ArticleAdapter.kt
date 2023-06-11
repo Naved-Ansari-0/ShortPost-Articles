@@ -4,9 +4,12 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.login.R
@@ -80,10 +83,11 @@ class ArticleAdapter(
                         tagText  += "#$tag "
                 holder.articleTag.text = tagText
                 if(tagText=="")
-                        holder.articleTag.visibility = View.INVISIBLE
+                        holder.articleTag.visibility = View.GONE
+
 
                 if(articlesList[position].imageUrl=="")
-                        holder.authorImage.visibility = View.INVISIBLE
+                        holder.articleImage.visibility = View.GONE
                 else
                         Glide.with(context).load(articlesList[position].imageUrl).into(holder.articleImage)
 
@@ -196,6 +200,13 @@ class ArticleAdapter(
                         }.addOnFailureListener {
                                 holder.bookmarkArticleButton.isEnabled = true
                         }
+                }
+
+
+                holder.articleImage.setOnClickListener {
+                        val scaleAnimation = ScaleAnimation(1f, 0.95f, 1f, 0.95f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+                        scaleAnimation.duration = 500
+                        holder.articleImage.startAnimation(scaleAnimation)
                 }
 
         }

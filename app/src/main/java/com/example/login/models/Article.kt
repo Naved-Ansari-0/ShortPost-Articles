@@ -8,7 +8,7 @@ data class Article(
     val title : String,
     val text : String,
     val tags : ArrayList<String>,
-    val imageUrl : String,
+    var imageUrl : String,
     val publishedOn : Timestamp,
     val likedBy : ArrayList<String>
 )

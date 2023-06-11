@@ -12,7 +12,6 @@ import com.example.login.models.User
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -125,7 +124,6 @@ class SignUpScreen : AppCompatActivity() {
                                     SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
                                 }
                             }
-
                     } else {
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
@@ -133,8 +131,6 @@ class SignUpScreen : AppCompatActivity() {
                 }
 
         }
-
-
 
     }
 

@@ -76,15 +76,12 @@ class SignInScreen : AppCompatActivity() {
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful){
                                         Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
+                                        auth.signOut()
                                     }else{
-
                                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-
                                     }
                                 }
-
-                            auth.signOut()
                             return@addOnCompleteListener
                         }
 

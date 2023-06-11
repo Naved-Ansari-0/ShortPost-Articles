@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import com.example.login.home.HomeFragment
 import com.example.login.home.ProfileFragment
-import com.example.login.signIn.SignInSignUpUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeScreen : AppCompatActivity() {

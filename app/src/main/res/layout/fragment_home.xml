@@ -3,11 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/home_fragment_background"
+    tools:context=".home.HomeFragment"
+    android:id="@+id/frameLayout">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/homeArticlesRecView"/>
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/homeArticlesRecView"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:elevation="10dp"
+            android:backgroundTint="@color/navyBlue"
+            android:tintMode="@color/orange"
+            app:borderWidth="0dp"
+            android:src="@drawable/baseline_add_circle_24"
+            android:id="@+id/floatingAddArticleButton"/>
+
+    </RelativeLayout>
 
 </FrameLayout>
