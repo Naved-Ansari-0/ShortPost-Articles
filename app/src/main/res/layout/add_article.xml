@@ -19,6 +19,7 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="right"
                 android:src="@drawable/baseline_cancel_24"
+                android:stateListAnimator="@animator/image_button_animation"
                 android:id="@+id/discardArticleButton"/>
 
             <LinearLayout
@@ -80,6 +81,7 @@
                     style="@style/imageButton"
                     android:layout_marginHorizontal="10dp"
                     android:src="@drawable/baseline_photo_size_select_actual_24"
+                    android:stateListAnimator="@animator/image_button_animation"
                     android:id="@+id/addImageButton"/>
 
                 <TextView

@@ -26,6 +26,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/transparentEditText"
                 android:hint="Name"
+                android:maxLength="25"
                 android:inputType="textPersonName"
                 android:id="@+id/nameSignUp" />
 

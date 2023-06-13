@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:background="@drawable/add_article_background">
+
+        <LinearLayout
+            style="@style/horizontalLinearLayout">
+
+            <TextView
+                style="@style/formTextView"
+                android:text="Name"/>
+
+            <EditText
+                style="@style/formEditText"
+                android:inputType="text"
+                android:id="@+id/userNameEditText"
+                android:maxLength="25"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/horizontalLinearLayout">
+
+            <TextView
+                style="@style/formTextView"
+                android:text="About"/>
+
+            <EditText
+                style="@style/formEditText"
+                android:inputType="textMultiLine"
+                android:id="@+id/aboutUserEditText"
+                android:maxLength="100"/>
+
+        </LinearLayout>
+
+        <android.widget.Button
+            style="@style/outlineCircularButton"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:textSize="12sp"
+            android:text="Save"
+            android:background="@drawable/submit_button_background"
+            android:id="@+id/saveDetailsButton"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

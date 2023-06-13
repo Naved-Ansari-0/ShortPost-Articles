@@ -59,9 +59,20 @@ object AddArticleUtils {
     fun checkTags(context: Context, tags:String):Boolean{
         if(tags=="")
             return true
-        val namePattern = Regex("^[a-zA-Z0-9# ]+\$")
+        val namePattern = Regex("^[a-zA-Z0-9#]+\$")
         if(!namePattern.matches(tags)){
             Toast.makeText(context,"Invalid character in Tags", Toast.LENGTH_SHORT).show()
+            return false
+        }
+        return true
+    }
+
+    fun checkAbout(context: Context, about:String):Boolean{
+        if(about=="")
+            return true
+        val namePattern = Regex("^[a-zA-Z0-9@*()|';,.\\s-]+\$")
+        if(!namePattern.matches(about)){
+            Toast.makeText(context,"Invalid character in about", Toast.LENGTH_SHORT).show()
             return false
         }
         return true

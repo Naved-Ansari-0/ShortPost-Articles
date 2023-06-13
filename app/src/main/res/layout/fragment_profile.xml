@@ -1,8 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/profile_fragment_background"
     tools:context=".home.ProfileFragment">
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                style="@style/imageButton"
+                android:src="@drawable/baseline_menu_24"
+                android:stateListAnimator="@animator/image_button_animation"
+                android:layout_margin="10dp"
+                android:layout_gravity="right"
+                android:id="@+id/settingMenuButton"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/detailsLinearLayout">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_gravity="center"
+                    android:elevation="5dp"
+                    android:id="@+id/userImage"/>
+
+                <ImageButton
+                    style="@style/imageButton"
+                    android:src="@drawable/baseline_edit_24"
+                    android:stateListAnimator="@animator/image_button_animation"
+                    android:layout_marginStart="10dp"
+                    android:layout_gravity="left"
+                    android:id="@+id/editDetailsButton"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:text="FirstName LastName"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:layout_gravity="center"
+                    android:id="@+id/userName"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginHorizontal="30dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="About"
+                        android:textStyle="italic"
+                        android:textSize="15sp"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:text="@string/about_text_sample"
+                        android:id="@+id/aboutUser"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/add_article_background"
+                android:elevation="10dp"
+                android:layout_margin="30dp"
+                android:id="@+id/articlesMenuLinearLayout">
+
+                <TextView
+                    style="@style/articleMenuTextView"
+                    android:text="My Articles"
+                    android:drawableLeft="@drawable/baseline_article_24"
+                    android:id="@+id/myArticles"/>
+
+                <View
+                    style="@style/line1"/>
+
+                <TextView
+                    style="@style/articleMenuTextView"
+                    android:text="Liked Articles"
+                    android:drawableLeft="@drawable/baseline_thumb_up_24"
+                    android:id="@+id/likedArticles"/>
+
+                <View
+                    style="@style/line1"/>
+
+                <TextView
+                    style="@style/articleMenuTextView"
+                    android:text="Bookmarked Articles"
+                    android:drawableLeft="@drawable/baseline_bookmark_added_24"
+                    android:id="@+id/bookmarkedArticles"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

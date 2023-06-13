@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:background="@drawable/article_post_background"
     android:layout_margin="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +20,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginVertical="10dp"
             android:src="@drawable/baseline_person_24"
+            android:stateListAnimator="@animator/image_button_animation"
             android:id="@+id/authorImage"/>
 
         <TextView
@@ -96,6 +98,7 @@
         <ImageButton
             style="@style/imageButton"
             android:src="@drawable/baseline_thumb_up_off_alt_24"
+            android:stateListAnimator="@animator/image_button_animation"
             android:layout_alignParentStart="true"
             android:id="@+id/likeArticleButton"/>
 
@@ -111,6 +114,7 @@
         <ImageButton
             style="@style/imageButton"
             android:src="@drawable/baseline_bookmark_add_24"
+            android:stateListAnimator="@animator/image_button_animation"
             android:layout_centerInParent="true"
             android:id="@+id/bookmarkArticleButton"/>
 

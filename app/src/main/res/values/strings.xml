@@ -2,4 +2,5 @@
     <string name="app_name">Login</string>
     <string name="article_text_sample">Food is not just a necessity; it is an art, a passion, and a journey that takes us through a world of flavors and cultures. From the comforting aroma of freshly baked bread to the vibrant colors of a rainbow salad, food has the power to ignite our senses and bring people together.\n\n In the realm of gastronomy, there are endless possibilities to indulge in culinary experiences. Whether its savoring traditional dishes from different regions or embarking on a gastronomic adventure, food allows us to explore diverse cultures and traditions.</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="about_text_sample">SDE III at PayPal | ex-IBM | This is fake about, test string.</string>
 </resources>
