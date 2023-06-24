@@ -1,5 +1,6 @@
 package com.example.login.home
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +40,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var detailsLinearLayout : LinearLayout
     private lateinit var articlesMenuLinearLayout : LinearLayout
+
+    private val PICK_IMAGE_REQUEST = 123
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -117,7 +120,31 @@ class ProfileFragment : Fragment() {
         bookmarkedArticles.setOnClickListener(clickListener)
         likedArticles.setOnClickListener(clickListener)
 
+        userImage.setOnClickListener {
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "image/*"
+                startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
 
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            val selectedImageUri = data.data
+            if (selectedImageUri != null) {
+                AddArticleUtils.uploadImageToFirebase(requireContext(), selectedImageUri,"images/userImages/"){it->
+                    db = FirebaseFirestore.getInstance()
+                    val userDocRef = db.collection("users").document(userId)
+                    userDocRef.update("imageUrl",it)
+                        .addOnSuccessListener {
+                            Glide.with(requireContext()).load(selectedImageUri).into(userImage)
+                            Toast.makeText(requireContext(),"Profile picture updated successfully", Toast.LENGTH_SHORT).show()
+                        }
+                }
+            }
+        }
     }
 
     private fun editDetailsDialog(){
@@ -180,7 +207,6 @@ class ProfileFragment : Fragment() {
                 }
         }
     }
-
 
 }
 
