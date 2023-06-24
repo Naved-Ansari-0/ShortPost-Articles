@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fragment_background"
     tools:context=".home.SettingScreen">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            style="@style/imageButton"
+            android:src="@drawable/baseline_arrow_back_ios_new_24"
+            android:stateListAnimator="@animator/image_button_animation"
+            android:layout_margin="20dp"
+            android:layout_gravity="left"
+            android:id="@+id/backButton"/>
+
+        <TextView
+            style="@style/articleMenuTextView"
+            android:text="About"
+            android:id="@+id/about"/>
+
+        <View
+            style="@style/line1"/>
+
+        <TextView
+            style="@style/articleMenuTextView"
+            android:text="Logout"
+            android:textColor="@color/blue"
+            android:id="@+id/logout"/>
+
+        <View
+            style="@style/line1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

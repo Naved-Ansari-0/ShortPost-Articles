@@ -10,5 +10,7 @@ data class Article(
     val tags : ArrayList<String>,
     var imageUrl : String,
     val publishedOn : Timestamp,
-    val likedBy : ArrayList<String>
+    val likedBy : ArrayList<String>,
+    val status : String,
+    val reportedBy : ArrayList<String>
 )

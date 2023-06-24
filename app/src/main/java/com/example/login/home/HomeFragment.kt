@@ -6,7 +6,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -25,22 +24,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import java.util.UUID
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
 
     private lateinit var homeArticlesRecView : RecyclerView
     private lateinit var articlesList : ArrayList<Article>
     private lateinit var floatingAddArticleButton : FloatingActionButton
     private lateinit var frameLayout: FrameLayout
+    private lateinit var articleAdapter:ArticleAdapter
 
     private lateinit var auth : FirebaseAuth
     private lateinit var db : FirebaseFirestore
@@ -57,44 +47,12 @@ class HomeFragment : Fragment() {
     private var imageName : TextView?=null
     private var submitArticleButton : Button?=null
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -118,13 +76,15 @@ class HomeFragment : Fragment() {
         auth = Firebase.auth
         db = FirebaseFirestore.getInstance()
 
-        val articleAdapter = ArticleAdapter(this,articlesList)
+        articleAdapter = ArticleAdapter(requireContext(),articlesList)
         homeArticlesRecView.adapter = articleAdapter
 
         db.collection("articles").get()
             .addOnSuccessListener {querySnapShot ->
                 for(document in querySnapShot){
-
+                    val status = document.get("status").toString()
+                    if(status!="visible")
+                        continue
                     val articleId = document.get("articleId").toString()
                     val authorId = document.get("authorId").toString()
                     val title = document.get("title").toString()
@@ -133,6 +93,7 @@ class HomeFragment : Fragment() {
                     val imageUrl = document.get("imageUrl").toString()
                     val publishedOn = document.get("publishedOn") as Timestamp
                     val likedBy = document.get("likedBy") as ArrayList<String>
+                    val reportedBy = document.get("reportedBy") as ArrayList<String>
 
                     articlesList.add(
                         Article(
@@ -143,11 +104,14 @@ class HomeFragment : Fragment() {
                             tags,
                             imageUrl,
                             publishedOn,
-                            likedBy
+                            likedBy,
+                            status,
+                            reportedBy
                             )
                         )
                     articleAdapter.notifyDataSetChanged()
                 }
+                articlesList.sortByDescending { it.publishedOn }
                 progressBar.visibility = View.INVISIBLE
             }.addOnFailureListener {
                 progressBar.visibility = View.INVISIBLE
@@ -234,6 +198,7 @@ class HomeFragment : Fragment() {
             var uploadedImageUrl = ""
             val authorId = Firebase.auth.currentUser!!.uid
             val articleId = authorId + "-" + UUID.randomUUID().toString()
+            val status = "visible"
 
             val articleData = Article(
                 articleId,
@@ -243,6 +208,8 @@ class HomeFragment : Fragment() {
                 tagsArray,
                 uploadedImageUrl,
                 Timestamp.now(),
+                ArrayList(),
+                status,
                 ArrayList()
             )
 
@@ -289,7 +256,9 @@ class HomeFragment : Fragment() {
                         if(documentSnapShot.exists()){
                             userCollectionRef.update("articles", FieldValue.arrayUnion(article.articleId))
                                 .addOnSuccessListener {
-                                    Toast.makeText(requireContext(), "Submitted successfully. You article will be available in public feed after reviewing.", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(requireContext(), "Submitted successfully", Toast.LENGTH_SHORT).show()
+                                    articlesList.add(0,article)
+                                    articleAdapter.notifyDataSetChanged()
                                     dialog.dismiss()
                                 }.addOnFailureListener {
                                     errorWhileSubmittingArticle()

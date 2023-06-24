@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/profile_fragment_background"
+    android:background="@drawable/fragment_background"
     tools:context=".home.ProfileFragment">
 
     <ScrollView
@@ -42,8 +41,8 @@
                     style="@style/imageButton"
                     android:src="@drawable/baseline_edit_24"
                     android:stateListAnimator="@animator/image_button_animation"
-                    android:layout_marginStart="10dp"
-                    android:layout_gravity="left"
+                    android:layout_marginEnd="30dp"
+                    android:layout_gravity="right"
                     android:id="@+id/editDetailsButton"/>
 
                 <TextView
@@ -51,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
                     android:text="FirstName LastName"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:layout_gravity="center"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/add_article_background"
+                android:background="@drawable/article_post_background"
                 android:elevation="10dp"
                 android:layout_margin="30dp"
                 android:id="@+id/articlesMenuLinearLayout">

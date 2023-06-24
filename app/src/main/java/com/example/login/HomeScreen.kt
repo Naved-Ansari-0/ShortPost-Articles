@@ -40,7 +40,7 @@ class HomeScreen : AppCompatActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, ProfileFragment())
+            .replace(R.id.fragmentContainer, HomeFragment())
             .commit()
 
     }

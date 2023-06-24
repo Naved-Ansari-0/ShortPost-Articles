@@ -1,6 +1,7 @@
 package com.example.login.models
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,11 @@ import android.view.animation.ScaleAnimation
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.login.R
-import com.example.login.home.HomeFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -23,13 +24,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ArticleAdapter(
-        private val context: HomeFragment,
+        private val context: Context,
         private val articlesList: ArrayList<Article>
         ):RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>(){
 
         class ArticleViewHolder(itemView : View):RecyclerView.ViewHolder(itemView){
                 val authorImage : CircleImageView = itemView.findViewById(R.id.authorImage)
                 val authorName : TextView = itemView.findViewById(R.id.authorName)
+                val deleteArticleButton : ImageButton = itemView.findViewById(R.id.deleteArticleButton)
                 val articleTitle : TextView = itemView.findViewById(R.id.articleTitle)
                 val articleText : TextView = itemView.findViewById(R.id.articleText)
                 val articleTag : TextView = itemView.findViewById(R.id.articleTag)
@@ -52,9 +54,10 @@ class ArticleAdapter(
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
 
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val userId = FirebaseAuth.getInstance().currentUser!!.uid.toString()
                 val db = FirebaseFirestore.getInstance()
                 val articleId = articlesList[position].articleId
+                val authorId = articlesList[position].authorId.toString()
                 val articleDocumentRef = db.collection("articles").document(articleId)
                 val authorDocumentRef = db.collection("users").document(articlesList[position].authorId)
                 val userDocumentRef = db.collection("users").document(userId)
@@ -65,9 +68,66 @@ class ArticleAdapter(
                                 val authorImageUrl = documentSnapShot.get("imageUrl").toString()
                                 holder.authorName.text = authorName
                                 if(authorImageUrl=="")
-                                        holder.authorImage.setImageResource(R.drawable.baseline_person_24)
+                                        holder.authorImage.setImageResource(R.drawable.default_user_image)
                                 else
                                         Glide.with(context).load(authorImageUrl).into(holder.authorImage)
+                        }
+                }
+
+                if(authorId!=userId){
+                        holder.deleteArticleButton.setImageResource(R.drawable.outline_report_24)
+                }else{
+                        holder.deleteArticleButton.setImageResource(R.drawable.baseline_delete_outline_24)
+                }
+
+                holder.deleteArticleButton.setOnClickListener {
+                        articleDocumentRef.get().addOnSuccessListener {documentSnapShot->
+                                if(documentSnapShot.exists()){
+                                        if(authorId==userId){
+                                                val builder = AlertDialog.Builder(context)
+                                                builder.setMessage("Are you sure you want to delete this article?")
+                                                builder.setPositiveButton("Yes") { dialog, _ ->
+                                                        builder.setCancelable(false)
+                                                        articleDocumentRef.update("status", "deleted")
+                                                                .addOnSuccessListener {
+                                                                        articlesList.removeAt(position)
+                                                                        notifyItemRemoved(position)
+                                                                        notifyItemRangeChanged(position, articlesList.size)
+                                                                        holder.deleteArticleButton.isEnabled = true
+                                                                        dialog.dismiss()
+                                                                }.addOnFailureListener {
+                                                                        holder.deleteArticleButton.isEnabled = true
+                                                                        dialog.dismiss()
+                                                                }
+                                                }
+                                                val dialog = builder.create()
+                                                dialog.show()
+                                        }else{
+                                                if(articlesList[position].reportedBy.contains(userId)){
+                                                        Toast.makeText(context, "Already reported", Toast.LENGTH_SHORT).show()
+                                                        return@addOnSuccessListener
+                                                }
+                                                val builder = AlertDialog.Builder(context)
+                                                builder.setMessage("Do you want to report this article for inappropriate content?")
+                                                builder.setPositiveButton("Yes") { dialog, _ ->
+                                                        builder.setCancelable(false)
+                                                        articleDocumentRef.update("reportedBy", FieldValue.arrayUnion(userId))
+                                                                .addOnSuccessListener {
+                                                                        Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show()
+                                                                        articlesList[position].reportedBy.add(userId)
+                                                                        holder.deleteArticleButton.isEnabled = true
+                                                                        dialog.dismiss()
+                                                                }.addOnFailureListener {
+                                                                        holder.deleteArticleButton.isEnabled = true
+                                                                        dialog.dismiss()
+                                                                }
+                                                }
+                                                val dialog = builder.create()
+                                                dialog.show()
+                                        }
+
+                                }else
+                                        holder.deleteArticleButton.isEnabled = true
                         }
                 }
 
@@ -109,8 +169,6 @@ class ArticleAdapter(
                                         holder.bookmarkArticleButton.setImageResource(R.drawable.baseline_bookmark_added_24)
                         }
                 }
-
-
 
                 holder.likeArticleButton.setOnClickListener {
                         holder.likeArticleButton.isEnabled = false
