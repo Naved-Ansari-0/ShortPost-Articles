@@ -63,6 +63,8 @@ class SignInScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            signInButton.isEnabled = false
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -77,11 +79,19 @@ class SignInScreen : AppCompatActivity() {
                                     if (task.isSuccessful){
                                         Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
                                         auth.signOut()
+                                        signInButton.isEnabled = true
                                     }else{
                                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
+                                        auth.signOut()
+                                        signInButton.isEnabled = true
                                     }
                                 }
+                                .addOnFailureListener {
+                                    auth.signOut()
+                                    signInButton.isEnabled = true
+                                }
+                            auth.signOut()
                             return@addOnCompleteListener
                         }
 
@@ -91,13 +101,15 @@ class SignInScreen : AppCompatActivity() {
                             R.anim.slide_out_to_left
                         )
                         finishAffinity()
-
                     } else {
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-
+                        signInButton.isEnabled = true
                     }
+                }
+                .addOnFailureListener {
+                    signInButton.isEnabled = true
                 }
 
         }

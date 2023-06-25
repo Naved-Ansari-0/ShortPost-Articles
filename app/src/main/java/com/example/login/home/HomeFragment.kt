@@ -166,11 +166,6 @@ class HomeFragment : Fragment() {
 
         submitArticleButton!!.setOnClickListener {
 
-            if (!SignInSignUpUtils.isInternetAvailable(requireContext())) {
-                SignInSignUpUtils.noInternetToast(requireContext())
-                return@setOnClickListener
-            }
-
             val title = articleTitle!!.text.toString().trim()
             val text = articleText!!.text.toString().trim()
             val tags = articleTags!!.text.toString().trim()
@@ -182,10 +177,12 @@ class HomeFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            discardArticleButton!!.isEnabled = false
-            addImageButton!!.isEnabled = false
-            submitArticleButton!!.isEnabled = false
-            submitArticleButton!!.text = "Submitting..."
+            if (!SignInSignUpUtils.isInternetAvailable(requireContext())) {
+                SignInSignUpUtils.noInternetToast(requireContext())
+                return@setOnClickListener
+            }
+
+            disableButtonsEditText()
 
             var tagsArray: ArrayList<String> = arrayListOf()
             if (tags.isNotEmpty()) {
@@ -221,6 +218,8 @@ class HomeFragment : Fragment() {
                         articleData.imageUrl = it.toString()
                         submitArticle(articleData)
                     }else {
+                        imageName!!.text = uploadImagePath.substringAfterLast("/")
+                        enableButtonsEditText()
                     }
                 }
             }else{
@@ -259,6 +258,7 @@ class HomeFragment : Fragment() {
                                     Toast.makeText(requireContext(), "Submitted successfully", Toast.LENGTH_SHORT).show()
                                     articlesList.add(0,article)
                                     articleAdapter.notifyDataSetChanged()
+                                    enableButtonsEditText()
                                     dialog.dismiss()
                                 }.addOnFailureListener {
                                     errorWhileSubmittingArticle()
@@ -276,12 +276,32 @@ class HomeFragment : Fragment() {
 
     private fun errorWhileSubmittingArticle(){
         Toast.makeText(requireContext(), "Error while submitting", Toast.LENGTH_SHORT).show()
-        discardArticleButton!!.isEnabled = true
-        addImageButton!!.isEnabled = true
+        enableButtonsEditText()
         addImageButton!!.setImageResource(R.drawable.baseline_photo_size_select_actual_24)
-        submitArticleButton!!.isEnabled = true
         imageName!!.text = "(Optional)"
         uploadImagePath = ""
     }
+
+    private fun disableButtonsEditText(){
+        submitArticleButton!!.text = "Submitting..."
+        discardArticleButton!!.isEnabled = false
+        addImageButton!!.isEnabled = false
+        submitArticleButton!!.isEnabled = false
+        articleTitle!!.isFocusable = false
+        articleText!!.isFocusable = false
+        articleTags!!.isFocusable = false
+    }
+
+    private fun enableButtonsEditText(){
+        submitArticleButton!!.text = "Submit Article"
+        discardArticleButton!!.isEnabled = true
+        addImageButton!!.isEnabled = true
+        submitArticleButton!!.isEnabled = true
+        articleTitle!!.isFocusable = true
+        articleText!!.isFocusable = true
+        articleTags!!.isFocusable = true
+    }
+
+
 
 }

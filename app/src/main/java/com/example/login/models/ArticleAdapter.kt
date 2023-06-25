@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.login.R
+import com.example.login.signIn.SignInSignUpUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,12 +55,12 @@ class ArticleAdapter(
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
 
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid.toString()
+                val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val db = FirebaseFirestore.getInstance()
                 val articleId = articlesList[position].articleId
-                val authorId = articlesList[position].authorId.toString()
+                val authorId = articlesList[position].authorId
                 val articleDocumentRef = db.collection("articles").document(articleId)
-                val authorDocumentRef = db.collection("users").document(articlesList[position].authorId)
+                val authorDocumentRef = db.collection("users").document(authorId)
                 val userDocumentRef = db.collection("users").document(userId)
 
                 authorDocumentRef.get().addOnSuccessListener{documentSnapShot ->
@@ -81,6 +82,12 @@ class ArticleAdapter(
                 }
 
                 holder.deleteArticleButton.setOnClickListener {
+                        if(!SignInSignUpUtils.isInternetAvailable(context)){
+                                SignInSignUpUtils.noInternetToast(context)
+                                return@setOnClickListener
+                        }
+
+                        holder.deleteArticleButton.isEnabled = false
                         articleDocumentRef.get().addOnSuccessListener {documentSnapShot->
                                 if(documentSnapShot.exists()){
                                         if(authorId==userId){
@@ -125,16 +132,19 @@ class ArticleAdapter(
                                                 val dialog = builder.create()
                                                 dialog.show()
                                         }
-
                                 }else
                                         holder.deleteArticleButton.isEnabled = true
+                        }.addOnFailureListener {
+                                holder.deleteArticleButton.isEnabled = true
                         }
                 }
 
-                if(articlesList[position].title=="")
-                        holder.articleTitle.visibility = View.INVISIBLE
-                else
+                if (articlesList[position].title.isBlank()) {
+                        holder.articleTitle.visibility = View.GONE
+                } else {
+                        holder.articleTitle.visibility = View.VISIBLE
                         holder.articleTitle.text = articlesList[position].title
+                }
 
                 holder.articleText.text = articlesList[position].text
 
@@ -144,24 +154,39 @@ class ArticleAdapter(
                 holder.articleTag.text = tagText
                 if(tagText=="")
                         holder.articleTag.visibility = View.GONE
+                else{
+                        holder.articleTag.text = tagText
+                        holder.articleTag.visibility = View.VISIBLE
+                }
 
 
                 if(articlesList[position].imageUrl=="")
                         holder.articleImage.visibility = View.GONE
-                else
+                else {
+                        holder.articleImage.visibility = View.VISIBLE
                         Glide.with(context).load(articlesList[position].imageUrl).into(holder.articleImage)
+                }
 
                 holder.articleLikeCount.text = articlesList[position].likedBy.size.toString()
                 if(articlesList[position].likedBy.isEmpty())
                         holder.articleLikeCount.visibility = View.INVISIBLE
+                else {
+                        holder.articleLikeCount.visibility = View.VISIBLE
+                        holder.articleLikeCount.text = articlesList[position].likedBy.size.toString()
+                }
+
                 if(articlesList[position].likedBy.contains(userId))
                         holder.likeArticleButton.setImageResource(R.drawable.baseline_thumb_up_24)
+                else
+                        holder.likeArticleButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24)
 
                 val date = articlesList[position].publishedOn.toDate()
                 val dateFormat = SimpleDateFormat("d MMM, yyyy", Locale.getDefault()).format(date)
                 val timeFormat = SimpleDateFormat("h:mm a", Locale.getDefault()).format(date)
                 holder.articlePublishedOn.text = "$dateFormat at $timeFormat"
 
+
+                holder.bookmarkArticleButton.setImageResource(R.drawable.baseline_bookmark_add_24)
                 userDocumentRef.get().addOnSuccessListener { documentSnapShot ->
                         if (documentSnapShot.exists()) {
                                 val bookmarkedArticles = documentSnapShot.get("bookmarkedArticles") as ArrayList<*>
@@ -171,6 +196,11 @@ class ArticleAdapter(
                 }
 
                 holder.likeArticleButton.setOnClickListener {
+                        if(!SignInSignUpUtils.isInternetAvailable(context)){
+                                SignInSignUpUtils.noInternetToast(context)
+                                return@setOnClickListener
+                        }
+
                         holder.likeArticleButton.isEnabled = false
                         userDocumentRef.get().addOnSuccessListener { documentSnapShot->
                                 if(documentSnapShot.exists()){
@@ -232,6 +262,11 @@ class ArticleAdapter(
 
 
                 holder.bookmarkArticleButton.setOnClickListener {
+                        if(!SignInSignUpUtils.isInternetAvailable(context)){
+                                SignInSignUpUtils.noInternetToast(context)
+                                return@setOnClickListener
+                        }
+
                         holder.bookmarkArticleButton.isEnabled = false
                         userDocumentRef.get().addOnSuccessListener {documentSnapShot->
                                 if(documentSnapShot.exists()){

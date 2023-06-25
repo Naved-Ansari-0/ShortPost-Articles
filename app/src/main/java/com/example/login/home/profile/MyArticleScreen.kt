@@ -1,4 +1,4 @@
-package com.example.login.home
+package com.example.login.home.profile
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.login.home
+package com.example.login.home.profile
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity

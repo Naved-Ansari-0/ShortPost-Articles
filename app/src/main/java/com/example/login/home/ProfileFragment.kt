@@ -13,6 +13,8 @@ import android.view.WindowManager
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.example.login.R
+import com.example.login.home.profile.MyArticleScreen
+import com.example.login.home.profile.SettingScreen
 import com.example.login.signIn.SignInSignUpUtils
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -104,7 +106,7 @@ class ProfileFragment : Fragment() {
         val clickListener = View.OnClickListener { view->
             if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
                 SignInSignUpUtils.noInternetToast(requireContext())
-                return@OnClickListener
+//                return@OnClickListener
             }
             val intent = Intent(requireContext(), MyArticleScreen::class.java)
             when(view.id){
@@ -121,6 +123,7 @@ class ProfileFragment : Fragment() {
         likedArticles.setOnClickListener(clickListener)
 
         userImage.setOnClickListener {
+            userImage.isClickable = false
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "image/*"
                 startActivityForResult(intent, PICK_IMAGE_REQUEST)
@@ -134,16 +137,38 @@ class ProfileFragment : Fragment() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri = data.data
             if (selectedImageUri != null) {
-                AddArticleUtils.uploadImageToFirebase(requireContext(), selectedImageUri,"images/userImages/"){it->
-                    db = FirebaseFirestore.getInstance()
-                    val userDocRef = db.collection("users").document(userId)
-                    userDocRef.update("imageUrl",it)
-                        .addOnSuccessListener {
-                            Glide.with(requireContext()).load(selectedImageUri).into(userImage)
-                            Toast.makeText(requireContext(),"Profile picture updated successfully", Toast.LENGTH_SHORT).show()
-                        }
+
+                if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
+                    SignInSignUpUtils.noInternetToast(requireContext())
+                    userImage.isClickable = true
+                    return
                 }
+
+                Toast.makeText(requireContext(),"Uploading Image", Toast.LENGTH_SHORT).show()
+
+                AddArticleUtils.uploadImageToFirebase(requireContext(), selectedImageUri,"images/userImages/"){it->
+                    if(it!=""){
+                        db = FirebaseFirestore.getInstance()
+                        val userDocRef = db.collection("users").document(userId)
+                        userDocRef.update("imageUrl",it)
+                            .addOnSuccessListener {
+                                Glide.with(requireContext()).load(selectedImageUri).into(userImage)
+                                Toast.makeText(requireContext(),"Profile picture updated successfully", Toast.LENGTH_SHORT).show()
+                                userImage.isClickable = true
+                            }
+                            .addOnFailureListener{
+                                userImage.isClickable = true
+                            }
+                    }else{
+                        userImage.isClickable = true
+                    }
+                }
+
+            }else{
+                userImage.isClickable = true
             }
+        }else{
+            userImage.isClickable = true
         }
     }
 
@@ -170,11 +195,6 @@ class ProfileFragment : Fragment() {
 
         saveDetailsButton?.setOnClickListener {
 
-            if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
-                SignInSignUpUtils.noInternetToast(requireContext())
-                return@setOnClickListener
-            }
-
             val name = userNameEditText?.text.toString().trim()
             val about = aboutUserEditText?.text.toString().trim()
 
@@ -182,8 +202,16 @@ class ProfileFragment : Fragment() {
                     !AddArticleUtils.checkAbout(requireContext(),about))
                 return@setOnClickListener
 
+            if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
+                SignInSignUpUtils.noInternetToast(requireContext())
+                return@setOnClickListener
+            }
+
             dialog.setCancelable(false)
             saveDetailsButton?.text = "Saving"
+            saveDetailsButton?.isEnabled = false
+            userNameEditText?.isFocusable = false
+            aboutUserEditText?.isFocusable = false
 
             userId = Firebase.auth.currentUser!!.uid
             db = FirebaseFirestore.getInstance()
@@ -204,6 +232,9 @@ class ProfileFragment : Fragment() {
                     Toast.makeText(requireContext(),"Error on updating details", Toast.LENGTH_SHORT).show()
                     saveDetailsButton?.text = "Save"
                     dialog.setCancelable(true)
+                    saveDetailsButton?.isEnabled = true
+                    userNameEditText?.isFocusable = true
+                    aboutUserEditText?.isFocusable = true
                 }
         }
     }

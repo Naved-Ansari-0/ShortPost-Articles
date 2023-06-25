@@ -44,19 +44,24 @@ class ResetPwdScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            resetPwdButton.isEnabled = false
+
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(this){ task ->
                     if(task.isSuccessful){
 
                         Toast.makeText(this, "Reset password link sent to $email", Toast.LENGTH_LONG).show()
                         SignInSignUpUtils.navigateToSignInScreen(this, this)
-
+                        resetPwdButton.isEnabled = true
                     }else{
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-
+                        resetPwdButton.isEnabled = true
                     }
+                }
+                .addOnFailureListener {
+                    resetPwdButton.isEnabled = true
                 }
         }
     }

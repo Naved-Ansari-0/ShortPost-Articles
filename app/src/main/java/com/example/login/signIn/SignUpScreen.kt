@@ -74,6 +74,8 @@ class SignUpScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            signUpButton.isEnabled = false
+
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -108,26 +110,32 @@ class SignUpScreen : AppCompatActivity() {
 
                         db.collection("users").document(id).set(userData)
                             .addOnSuccessListener {
+                                user?.sendEmailVerification()
+                                    ?.addOnCompleteListener { task ->
+                                        if (task.isSuccessful){
+                                            Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
+                                            SignInSignUpUtils.navigateToSignInScreen(this, this)
+                                            signUpButton.isEnabled = true
+                                        }else{
+                                            val errorCode = (task.exception as FirebaseAuthException).errorCode
+                                            SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
+                                            signUpButton.isEnabled = true
+                                        }
+                                    }
                             }
                             .addOnFailureListener{
                                 val errorCode = (task.exception as FirebaseAuthException).errorCode
                                 SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                            }
-
-                        user?.sendEmailVerification()
-                            ?.addOnCompleteListener { task ->
-                                if (task.isSuccessful){
-                                    Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
-                                    SignInSignUpUtils.navigateToSignInScreen(this, this)
-                                }else{
-                                    val errorCode = (task.exception as FirebaseAuthException).errorCode
-                                    SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                                }
+                                signUpButton.isEnabled = true
                             }
                     } else {
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
+                        signUpButton.isEnabled = true
                     }
+                }
+                .addOnFailureListener {
+                    signUpButton.isEnabled = true
                 }
 
         }

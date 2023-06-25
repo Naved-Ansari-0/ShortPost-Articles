@@ -24,9 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         val intent : Intent = if(user==null){
             Intent(this, SignInScreen::class.java)
-        }else{
+        } else if(!(user!!.isEmailVerified)){
+            auth.signOut()
+            Intent(this, SignInScreen::class.java)
+        } else {
             Intent(this, HomeScreen::class.java)
         }
+
 
         startActivity(intent)
         finishAffinity()

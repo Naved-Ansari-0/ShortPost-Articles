@@ -15,10 +15,10 @@
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
         <activity
-            android:name=".home.MyArticleScreen"
+            android:name=".home.profile.MyArticleScreen"
             android:exported="false" />
         <activity
-            android:name=".home.SettingScreen"
+            android:name=".home.profile.SettingScreen"
             android:exported="false" />
         <activity
             android:name=".HomeScreen"
