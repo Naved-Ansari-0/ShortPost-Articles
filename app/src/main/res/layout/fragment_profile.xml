@@ -32,7 +32,7 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="200dp"
                     android:layout_height="200dp"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@drawable/default_user_image"
                     android:layout_gravity="center"
                     android:elevation="5dp"
                     android:id="@+id/userImage"/>
@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:text="FirstName LastName"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:fontFamily="sans-serif-condensed-medium"
@@ -82,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="15sp"
-                        android:text="@string/about_text_sample"
+                        android:text=""
                         android:id="@+id/aboutUser"/>
 
                 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.login.models
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.login.R
+import com.example.login.home.home.OthersProfile
 import com.example.login.signIn.SignInSignUpUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -54,7 +56,6 @@ class ArticleAdapter(
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-
                 val userId = FirebaseAuth.getInstance().currentUser!!.uid
                 val db = FirebaseFirestore.getInstance()
                 val articleId = articlesList[position].articleId
@@ -73,6 +74,24 @@ class ArticleAdapter(
                                 else
                                         Glide.with(context).load(authorImageUrl).into(holder.authorImage)
                         }
+                }
+
+                holder.authorName.setOnClickListener {
+                        val intent = Intent(context, OthersProfile::class.java)
+                        intent.putExtra("authorId", authorId)
+                        context.startActivity(intent)
+                }
+                holder.authorImage.setOnClickListener {
+                        val intent = Intent(context, OthersProfile::class.java)
+                        intent.putExtra("authorId", authorId)
+                        context.startActivity(intent)
+                }
+                if(context is OthersProfile || authorId==userId){
+                        holder.authorName.isClickable = false
+                        holder.authorImage.isClickable = false
+                }else{
+                        holder.authorName.isClickable = true
+                        holder.authorImage.isClickable = true
                 }
 
                 if(authorId!=userId){
