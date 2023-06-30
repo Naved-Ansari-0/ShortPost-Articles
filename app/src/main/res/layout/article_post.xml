@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:textSize="15sp"
-            android:textColor="@color/black"
+            android:textColor="@drawable/author_name_color_selector"
             android:textStyle="bold"
             android:text=""
             android:id="@+id/authorName"/>

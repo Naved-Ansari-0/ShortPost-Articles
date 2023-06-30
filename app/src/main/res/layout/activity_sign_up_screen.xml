@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sign_in_screen_gradient"
+    android:background="@drawable/gradient_dark_three_color"
     tools:context=".signIn.SignUpScreen">
 
     <LinearLayout
@@ -76,17 +76,50 @@
             android:text="Sign In"
             android:id="@+id/signInButton"/>
 
-        <CheckBox
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            android:textColor="@color/white"
-            android:buttonTint="@color/orange"
-            android:text="I agree to the Privacy Policy and Terms of Service."
-            android:id="@+id/agreeCheckBox"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/orange"
+                android:id="@+id/agreeCheckBox"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+
+                <TextView
+                    style="@style/privacyPolicyTextView"
+                    android:text="I agree to the "/>
+
+                <TextView
+                    style="@style/privacyPolicyTextView"
+                    android:text="Privacy Policy"
+                    android:textColor="@drawable/blue_text_button_color_selector"
+                    android:id="@+id/privacyPolicyLinkButton"/>
+
+                <TextView
+                    style="@style/privacyPolicyTextView"
+                    android:text=" and Terms of Service."/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <android.widget.Button
+        style="@style/skipButton"
+        android:text="Skip"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="50dp"
+        android:id="@+id/skipButton"/>
 
 </RelativeLayout>

@@ -6,7 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
+import com.example.login.HomeScreen
 import com.example.login.R
 
 object SignInSignUpUtils {
@@ -98,6 +101,10 @@ object SignInSignUpUtils {
         Toast.makeText(context,"No Internet", Toast.LENGTH_SHORT).show()
     }
 
+    fun notSignedInToast(context: Context){
+        Toast.makeText(context, "You are not signed in", Toast.LENGTH_SHORT).show()
+    }
+
     fun navigateToSignInScreen(context: Context, activity: Activity){
         context.startActivity(Intent(context, SignInScreen::class.java))
         activity.finishAffinity()
@@ -107,6 +114,18 @@ object SignInSignUpUtils {
     fun navigateToResetPwdScreen(context: Context, activity: Activity){
         context.startActivity(Intent(context, ResetPwdScreen::class.java))
         activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+    }
+
+    fun navigateToHomeScreen(context: Context, activity: Activity){
+        context.startActivity(Intent(context, HomeScreen::class.java))
+        activity.finishAffinity()
+        activity.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+    }
+
+    fun visitPrivacyPolicyLink(activity: Activity){
+        val url = "https://www.navedansari.in"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        activity.startActivity(intent)
     }
 
 }

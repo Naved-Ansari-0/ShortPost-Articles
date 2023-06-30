@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sign_in_screen_gradient"
+    android:background="@drawable/gradient_dark_three_color"
     tools:context=".signIn.SignInScreen">
 
     <LinearLayout
@@ -63,5 +63,13 @@
             android:id="@+id/signUpButton"/>
 
     </LinearLayout>
+
+    <android.widget.Button
+        style="@style/skipButton"
+        android:text="Skip"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="50dp"
+        android:id="@+id/skipButton"/>
 
 </RelativeLayout>

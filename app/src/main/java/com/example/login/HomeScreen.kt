@@ -12,7 +12,6 @@ class HomeScreen : AppCompatActivity() {
 
     private lateinit var fragmentContainer: FrameLayout
     private lateinit var bottomNavigationBar : BottomNavigationView
-
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +29,10 @@ class HomeScreen : AppCompatActivity() {
                     true
                 }
                 R.id.profileButton -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, ProfileFragment())
-                        .commit()
-                    true
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragmentContainer, ProfileFragment())
+                            .commit()
+                        true
                 }
                 else -> false
             }

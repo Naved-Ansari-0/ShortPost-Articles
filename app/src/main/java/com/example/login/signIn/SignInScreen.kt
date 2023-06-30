@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import com.example.login.HomeScreen
 import com.example.login.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -21,6 +20,7 @@ class SignInScreen : AppCompatActivity() {
     private lateinit var signInButton : Button
     private lateinit var forgotPwdButton : Button
     private lateinit var signUpButton : Button
+    private lateinit var skipButton : Button
 
     private lateinit var auth: FirebaseAuth
 
@@ -34,6 +34,7 @@ class SignInScreen : AppCompatActivity() {
         signInButton = findViewById(R.id.signInButton)
         forgotPwdButton = findViewById(R.id.forgotPwdButton)
         signUpButton = findViewById(R.id.signUpButton)
+        skipButton = findViewById(R.id.skipButton)
 
         auth = Firebase.auth
 
@@ -43,10 +44,12 @@ class SignInScreen : AppCompatActivity() {
         }
 
         forgotPwdButton.setOnClickListener{
-            startActivity(Intent(this, ResetPwdScreen::class.java))
-            overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
+            SignInSignUpUtils.navigateToResetPwdScreen(this, this)
         }
 
+        skipButton.setOnClickListener {
+            SignInSignUpUtils.navigateToHomeScreen(this, this)
+        }
 
         signInButton.setOnClickListener{
 
@@ -94,13 +97,7 @@ class SignInScreen : AppCompatActivity() {
                             auth.signOut()
                             return@addOnCompleteListener
                         }
-
-                        startActivity(Intent(this, HomeScreen::class.java))
-                        overridePendingTransition(
-                            R.anim.slide_in_from_right,
-                            R.anim.slide_out_to_left
-                        )
-                        finishAffinity()
+                        SignInSignUpUtils.navigateToHomeScreen(this,this)
                     } else {
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode

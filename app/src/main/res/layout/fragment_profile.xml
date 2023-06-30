@@ -3,130 +3,154 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fragment_background"
+    android:background="@drawable/gradient_green_vertical"
     tools:context=".home.ProfileFragment">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageButton
+            style="@style/imageButton"
+            android:src="@drawable/baseline_menu_24"
+            android:stateListAnimator="@animator/image_button_animation"
+            android:layout_margin="10dp"
+            android:layout_gravity="right"
+            android:id="@+id/settingMenuButton"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/detailsLinearLayout">
 
-            <ImageButton
-                style="@style/imageButton"
-                android:src="@drawable/baseline_menu_24"
-                android:stateListAnimator="@animator/image_button_animation"
-                android:layout_margin="10dp"
-                android:layout_gravity="right"
-                android:id="@+id/settingMenuButton"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/default_user_image"
+                android:layout_gravity="center"
+                android:elevation="5dp"
+                android:id="@+id/userImage"/>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/detailsLinearLayout">
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="20dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:src="@drawable/default_user_image"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:layout_gravity="center"
-                    android:elevation="5dp"
-                    android:id="@+id/userImage"/>
+                    android:id="@+id/userName"/>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
-                    android:layout_marginHorizontal="20dp">
+                <ImageButton
+                    style="@style/imageButton"
+                    android:src="@drawable/baseline_edit_24"
+                    android:stateListAnimator="@animator/image_button_animation"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:id="@+id/editDetailsButton"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:layout_gravity="center"
-                        android:id="@+id/userName"/>
-
-                    <ImageButton
-                        style="@style/imageButton"
-                        android:src="@drawable/baseline_edit_24"
-                        android:stateListAnimator="@animator/image_button_animation"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="10dp"
-                        android:id="@+id/editDetailsButton"/>
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="30dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="About"
-                        android:textStyle="italic"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:layout_marginEnd="10dp"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"
-                        android:text=""
-                        android:id="@+id/aboutUser"/>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/article_post_background"
-                android:elevation="10dp"
-                android:layout_margin="30dp"
-                android:id="@+id/articlesMenuLinearLayout">
+                android:layout_marginHorizontal="30dp">
 
                 <TextView
-                    style="@style/articleMenuTextView"
-                    android:text="My Articles"
-                    android:drawableLeft="@drawable/baseline_article_24"
-                    android:id="@+id/myArticles"/>
-
-                <View
-                    style="@style/line1"/>
-
-                <TextView
-                    style="@style/articleMenuTextView"
-                    android:text="Liked Articles"
-                    android:drawableLeft="@drawable/baseline_thumb_up_24"
-                    android:id="@+id/likedArticles"/>
-
-                <View
-                    style="@style/line1"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About"
+                    android:textStyle="italic"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="10dp"/>
 
                 <TextView
-                    style="@style/articleMenuTextView"
-                    android:text="Bookmarked Articles"
-                    android:drawableLeft="@drawable/baseline_bookmark_added_24"
-                    android:id="@+id/bookmarkedArticles"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text=""
+                    android:id="@+id/aboutUser"/>
 
             </LinearLayout>
+
 
         </LinearLayout>
 
-    </ScrollView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/article_post_background"
+            android:elevation="10dp"
+            android:layout_margin="30dp"
+            android:id="@+id/articlesMenuLinearLayout">
+
+            <TextView
+                style="@style/articleMenuTextView"
+                android:text="My Articles"
+                android:drawableLeft="@drawable/baseline_article_24"
+                android:id="@+id/myArticles"/>
+
+            <View
+                style="@style/line1"/>
+
+            <TextView
+                style="@style/articleMenuTextView"
+                android:text="Liked Articles"
+                android:drawableLeft="@drawable/baseline_thumb_up_24"
+                android:id="@+id/likedArticles"/>
+
+            <View
+                style="@style/line1"/>
+
+            <TextView
+                style="@style/articleMenuTextView"
+                android:text="Bookmarked Articles"
+                android:drawableLeft="@drawable/baseline_bookmark_added_24"
+                android:id="@+id/bookmarkedArticles"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/notSignedInRelativeLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="You are not signed in"/>
+
+                <android.widget.Button
+                    style="@style/textButtonBlue"
+                    android:layout_gravity="center"
+                    android:text="sign in"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:id="@+id/signInButton"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

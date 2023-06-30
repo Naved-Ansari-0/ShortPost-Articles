@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var frameLayout: FrameLayout
     private lateinit var articleAdapter:ArticleAdapter
 
-    private lateinit var auth : FirebaseAuth
+    private var auth : FirebaseAuth?=null
     private lateinit var db : FirebaseFirestore
 
     private lateinit var dialog : Dialog
@@ -124,6 +124,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun showAddArticleDialog() {
+
+        if(auth?.currentUser==null){
+                SignInSignUpUtils.notSignedInToast(requireContext())
+                return
+        }
 
         dialog = Dialog(requireContext(), R.style.TransparentDialog)
         dialog.setContentView(R.layout.add_article)

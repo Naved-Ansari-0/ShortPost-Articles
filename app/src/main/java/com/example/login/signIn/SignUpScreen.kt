@@ -1,6 +1,8 @@
 package com.example.login.signIn
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -24,7 +26,9 @@ class SignUpScreen : AppCompatActivity() {
     private lateinit var forgotPwdButton : Button
     private lateinit var signUpButton : Button
     private lateinit var signInButton : Button
+    private lateinit var skipButton : Button
     private lateinit var agreeCheckBox : CheckBox
+    private lateinit var privacyPolicyLinkButton: TextView
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db : FirebaseFirestore
@@ -40,7 +44,9 @@ class SignUpScreen : AppCompatActivity() {
         forgotPwdButton = findViewById(R.id.forgotPwdButton)
         signInButton = findViewById(R.id.signInButton)
         signUpButton = findViewById(R.id.signUpButton)
+        skipButton = findViewById(R.id.skipButton)
         agreeCheckBox = findViewById(R.id.agreeCheckBox)
+        privacyPolicyLinkButton = findViewById(R.id.privacyPolicyLinkButton)
 
         auth = Firebase.auth
 
@@ -50,6 +56,14 @@ class SignUpScreen : AppCompatActivity() {
 
         forgotPwdButton.setOnClickListener{
             SignInSignUpUtils.navigateToResetPwdScreen(this, this)
+        }
+
+        skipButton.setOnClickListener {
+            SignInSignUpUtils.navigateToHomeScreen(this, this)
+        }
+
+        privacyPolicyLinkButton.setOnClickListener {
+            SignInSignUpUtils.visitPrivacyPolicyLink(this)
         }
 
         signUpButton.setOnClickListener{

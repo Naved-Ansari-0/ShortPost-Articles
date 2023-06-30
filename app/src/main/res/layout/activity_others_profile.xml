@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/fragment_background"
+        android:background="@drawable/gradient_green_horizontal"
         tools:context=".home.home.OthersProfile">
 
         <LinearLayout
@@ -17,7 +17,6 @@
             android:orientation="horizontal"
             android:paddingHorizontal="30dp"
             android:paddingVertical="15dp"
-            android:background="@drawable/fragment_background"
             android:id="@+id/detailsLinearLayout">
 
             <de.hdodenhof.circleimageview.CircleImageView

@@ -16,6 +16,7 @@ class ResetPwdScreen : AppCompatActivity() {
     private lateinit var emailResetPwd : TextView
     private lateinit var resetPwdButton : Button
     private lateinit var signInButton : Button
+    private lateinit var skipButton : Button
 
     private lateinit var auth : FirebaseAuth
 
@@ -26,11 +27,16 @@ class ResetPwdScreen : AppCompatActivity() {
         emailResetPwd = findViewById(R.id.emailResetPwd)
         resetPwdButton = findViewById(R.id.resetPwdButton)
         signInButton = findViewById(R.id.signInButton)
+        skipButton = findViewById(R.id.skipButton)
 
         auth = Firebase.auth
 
         signInButton.setOnClickListener {
             SignInSignUpUtils.navigateToSignInScreen(this, this)
+        }
+
+        skipButton.setOnClickListener {
+            SignInSignUpUtils.navigateToHomeScreen(this, this)
         }
 
         resetPwdButton.setOnClickListener{

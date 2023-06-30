@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fragment_background"
+    android:background="@drawable/gradient_green_vertical"
     tools:context=".home.profile.SettingScreen">
 
     <LinearLayout
@@ -20,22 +20,79 @@
             android:layout_gravity="left"
             android:id="@+id/backButton"/>
 
-        <TextView
-            style="@style/articleMenuTextView"
-            android:text="About"
-            android:id="@+id/about"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-        <View
-            style="@style/line1"/>
+            <TextView
+                style="@style/articleMenuTextView"
+                android:text="Privacy Policy"
+                android:id="@+id/privacyPolicyLinkButton"/>
 
-        <TextView
-            style="@style/articleMenuTextView"
-            android:text="Logout"
-            android:textColor="@color/blue"
-            android:id="@+id/logout"/>
+            <View
+                style="@style/line1"/>
 
-        <View
-            style="@style/line1"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:id="@+id/logoutLinearLayout">
+
+            <TextView
+                style="@style/articleMenuTextView"
+                android:text="Logout"
+                android:textColor="@color/blue"
+                android:id="@+id/logout"/>
+
+            <View
+                style="@style/line1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/article_post_background"
+        android:elevation="10dp"
+        android:paddingVertical="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="italic"
+                android:text="Developed by "/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Naved Ansari"/>
+
+        </LinearLayout>
+
+        <android.widget.Button
+            style="@style/textButtonBlue"
+            android:text="navedansari.in"
+            android:layout_gravity="center"
+            android:id="@+id/website"/>
 
     </LinearLayout>
 

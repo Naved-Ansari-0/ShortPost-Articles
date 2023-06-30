@@ -31,13 +31,15 @@ class ProfileFragment : Fragment() {
     private lateinit var myArticles : TextView
     private lateinit var likedArticles : TextView
     private lateinit var bookmarkedArticles : TextView
+    private lateinit var notSignedInRelativeLayout: RelativeLayout
+    private lateinit var signInButton: Button
 
 
     private var userNameEditText : EditText?=null
     private var aboutUserEditText : EditText?=null
     private var saveDetailsButton : Button?=null
 
-    private lateinit var userId : String
+    private var userId : String?=null
     private lateinit var db : FirebaseFirestore
 
     private lateinit var detailsLinearLayout : LinearLayout
@@ -56,6 +58,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        userId = Firebase.auth.currentUser?.uid
+
         settingMenuButton = view.findViewById(R.id.settingMenuButton)
         editDetailsButton = view.findViewById(R.id.editDetailsButton)
         userImage = view.findViewById(R.id.userImage)
@@ -64,12 +68,21 @@ class ProfileFragment : Fragment() {
         myArticles = view.findViewById(R.id.myArticles)
         likedArticles = view.findViewById(R.id.likedArticles)
         bookmarkedArticles = view.findViewById(R.id.bookmarkedArticles)
+        notSignedInRelativeLayout = view.findViewById(R.id.notSignedInRelativeLayout)
+        signInButton = view.findViewById(R.id.signInButton)
 
         detailsLinearLayout = view.findViewById(R.id.detailsLinearLayout)
         articlesMenuLinearLayout = view.findViewById(R.id.articlesMenuLinearLayout)
         detailsLinearLayout.visibility = View.GONE
         articlesMenuLinearLayout.visibility = View.GONE
+        notSignedInRelativeLayout.visibility = View.GONE
 
+        if(userId==null)
+            notSignedInRelativeLayout.visibility = View.VISIBLE
+
+        signInButton.setOnClickListener {
+            SignInSignUpUtils.navigateToSignInScreen(requireContext(),requireActivity())
+        }
 
         settingMenuButton.setOnClickListener {
             startActivity(Intent(requireContext(), SettingScreen::class.java))
@@ -80,28 +93,25 @@ class ProfileFragment : Fragment() {
             editDetailsDialog()
         }
 
-        userId = Firebase.auth.currentUser!!.uid
         db = FirebaseFirestore.getInstance()
-        val userDocumentRef = db.collection("users").document(userId)
-        userDocumentRef.get()
-            .addOnSuccessListener {documentSnapShot->
-                if(documentSnapShot.exists()){
-                    val name = documentSnapShot.get("name").toString()
-                    val about = documentSnapShot.get("about").toString()
-                    val imageUrl = documentSnapShot.get("imageUrl").toString()
-                    userName.text = name
-                    aboutUser.text = about
-                    if(imageUrl!="")
-                        Glide.with(requireContext()).load(imageUrl).into(userImage)
-                    else {
-                        userImage.setImageResource(R.drawable.default_user_image)
-                    }
-                    detailsLinearLayout.visibility = View.VISIBLE
-                    articlesMenuLinearLayout.visibility = View.VISIBLE
+        val userDocumentRef = userId?.let { db.collection("users").document(it) }
+        userDocumentRef?.get()?.addOnSuccessListener { documentSnapShot->
+            if(documentSnapShot.exists()){
+                val name = documentSnapShot.get("name").toString()
+                val about = documentSnapShot.get("about").toString()
+                val imageUrl = documentSnapShot.get("imageUrl").toString()
+                userName.text = name
+                aboutUser.text = about
+                if(imageUrl!="")
+                    Glide.with(requireContext()).load(imageUrl).into(userImage)
+                else {
+                    userImage.setImageResource(R.drawable.default_user_image)
                 }
-            }.addOnFailureListener {
-
+                detailsLinearLayout.visibility = View.VISIBLE
+                articlesMenuLinearLayout.visibility = View.VISIBLE
             }
+        }?.addOnFailureListener {
+        }
 
         val clickListener = View.OnClickListener { view->
             if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
@@ -129,7 +139,6 @@ class ProfileFragment : Fragment() {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST)
         }
 
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -146,20 +155,26 @@ class ProfileFragment : Fragment() {
 
                 Toast.makeText(requireContext(),"Uploading Image", Toast.LENGTH_SHORT).show()
 
-                AddArticleUtils.uploadImageToFirebase(requireContext(), selectedImageUri,"images/userImages/"){it->
-                    if(it!=""){
+                AddArticleUtils.uploadImageToFirebase(
+                    requireContext(),
+                    selectedImageUri,
+                    "images/userImages/"
+                ) { it ->
+                    if (it != "") {
                         db = FirebaseFirestore.getInstance()
-                        val userDocRef = db.collection("users").document(userId)
-                        userDocRef.update("imageUrl",it)
-                            .addOnSuccessListener {
-                                Glide.with(requireContext()).load(selectedImageUri).into(userImage)
-                                Toast.makeText(requireContext(),"Profile picture updated successfully", Toast.LENGTH_SHORT).show()
-                                userImage.isClickable = true
-                            }
-                            .addOnFailureListener{
-                                userImage.isClickable = true
-                            }
-                    }else{
+                        val userDocRef = userId?.let { it1 -> db.collection("users").document(it1) }
+                        userDocRef?.update("imageUrl", it)?.addOnSuccessListener {
+                            Glide.with(requireContext()).load(selectedImageUri).into(userImage)
+                            Toast.makeText(
+                                requireContext(),
+                                "Profile picture updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            userImage.isClickable = true
+                        }?.addOnFailureListener {
+                            userImage.isClickable = true
+                        }
+                    } else {
                         userImage.isClickable = true
                     }
                 }
@@ -199,7 +214,8 @@ class ProfileFragment : Fragment() {
             val about = aboutUserEditText?.text.toString().trim()
 
             if(!SignInSignUpUtils.checkName(requireContext(), name) ||
-                    !AddArticleUtils.checkAbout(requireContext(),about))
+                    !AddArticleUtils.checkAbout(requireContext(), about)
+            )
                 return@setOnClickListener
 
             if(!SignInSignUpUtils.isInternetAvailable(requireContext())){
@@ -215,7 +231,7 @@ class ProfileFragment : Fragment() {
 
             userId = Firebase.auth.currentUser!!.uid
             db = FirebaseFirestore.getInstance()
-            val userDocumentRef = db.collection("users").document(userId)
+            val userDocumentRef = db.collection("users").document(userId!!)
 
             val editedDetails = mapOf(
                 "name" to name,

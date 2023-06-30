@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fragment_background"
+    android:background="@drawable/gradient_green_vertical"
     tools:context=".home.profile.MyArticleScreen"
     android:id="@+id/frameLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="10dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

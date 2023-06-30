@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/sign_in_screen_gradient"
+    android:background="@drawable/gradient_dark_three_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".signIn.ResetPwdScreen">
@@ -45,5 +45,13 @@
             android:id="@+id/signInButton" />
 
     </LinearLayout>
+
+    <android.widget.Button
+        style="@style/skipButton"
+        android:text="Skip"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="50dp"
+        android:id="@+id/skipButton"/>
 
 </RelativeLayout>

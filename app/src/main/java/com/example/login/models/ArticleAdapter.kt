@@ -56,13 +56,13 @@ class ArticleAdapter(
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-                val userId = FirebaseAuth.getInstance().currentUser!!.uid
+                val userId = FirebaseAuth.getInstance().currentUser?.uid
                 val db = FirebaseFirestore.getInstance()
                 val articleId = articlesList[position].articleId
                 val authorId = articlesList[position].authorId
                 val articleDocumentRef = db.collection("articles").document(articleId)
                 val authorDocumentRef = db.collection("users").document(authorId)
-                val userDocumentRef = db.collection("users").document(userId)
+                val userDocumentRef = userId?.let { db.collection("users").document(it) }
 
                 authorDocumentRef.get().addOnSuccessListener{documentSnapShot ->
                         if(documentSnapShot.exists()){
@@ -101,6 +101,11 @@ class ArticleAdapter(
                 }
 
                 holder.deleteArticleButton.setOnClickListener {
+                        if(userId==null){
+                                SignInSignUpUtils.notSignedInToast(context)
+                                return@setOnClickListener
+                        }
+
                         if(!SignInSignUpUtils.isInternetAvailable(context)){
                                 SignInSignUpUtils.noInternetToast(context)
                                 return@setOnClickListener
@@ -140,7 +145,9 @@ class ArticleAdapter(
                                                         articleDocumentRef.update("reportedBy", FieldValue.arrayUnion(userId))
                                                                 .addOnSuccessListener {
                                                                         Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show()
-                                                                        articlesList[position].reportedBy.add(userId)
+                                                                        if (userId != null) {
+                                                                                articlesList[position].reportedBy.add(userId)
+                                                                        }
                                                                         holder.deleteArticleButton.isEnabled = true
                                                                         dialog.dismiss()
                                                                 }.addOnFailureListener {
@@ -194,7 +201,7 @@ class ArticleAdapter(
                         holder.articleLikeCount.text = articlesList[position].likedBy.size.toString()
                 }
 
-                if(articlesList[position].likedBy.contains(userId))
+                if(userId!=null && articlesList[position].likedBy.contains(userId))
                         holder.likeArticleButton.setImageResource(R.drawable.baseline_thumb_up_24)
                 else
                         holder.likeArticleButton.setImageResource(R.drawable.baseline_thumb_up_off_alt_24)
@@ -206,7 +213,7 @@ class ArticleAdapter(
 
 
                 holder.bookmarkArticleButton.setImageResource(R.drawable.baseline_bookmark_add_24)
-                userDocumentRef.get().addOnSuccessListener { documentSnapShot ->
+                userDocumentRef?.get()?.addOnSuccessListener { documentSnapShot ->
                         if (documentSnapShot.exists()) {
                                 val bookmarkedArticles = documentSnapShot.get("bookmarkedArticles") as ArrayList<*>
                                 if (bookmarkedArticles.contains(articleId))
@@ -215,13 +222,18 @@ class ArticleAdapter(
                 }
 
                 holder.likeArticleButton.setOnClickListener {
+                        if(userId==null){
+                                SignInSignUpUtils.notSignedInToast(context)
+                                return@setOnClickListener
+                        }
+
                         if(!SignInSignUpUtils.isInternetAvailable(context)){
                                 SignInSignUpUtils.noInternetToast(context)
                                 return@setOnClickListener
                         }
 
                         holder.likeArticleButton.isEnabled = false
-                        userDocumentRef.get().addOnSuccessListener { documentSnapShot->
+                        userDocumentRef?.get()?.addOnSuccessListener { documentSnapShot->
                                 if(documentSnapShot.exists()){
                                         val likedArticles = documentSnapShot.get("likedArticles") as ArrayList<*>
                                         if(likedArticles.contains(articleId)){
@@ -273,7 +285,7 @@ class ArticleAdapter(
                                         }
                                 }else
                                         holder.likeArticleButton.isEnabled = true
-                        }.addOnFailureListener {
+                        }?.addOnFailureListener {
                                 holder.likeArticleButton.isEnabled = true
                         }
                 }
@@ -281,35 +293,40 @@ class ArticleAdapter(
 
 
                 holder.bookmarkArticleButton.setOnClickListener {
+                        if(userId==null){
+                                SignInSignUpUtils.notSignedInToast(context)
+                                return@setOnClickListener
+                        }
+
                         if(!SignInSignUpUtils.isInternetAvailable(context)){
                                 SignInSignUpUtils.noInternetToast(context)
                                 return@setOnClickListener
                         }
 
                         holder.bookmarkArticleButton.isEnabled = false
-                        userDocumentRef.get().addOnSuccessListener {documentSnapShot->
+                        userDocumentRef?.get()?.addOnSuccessListener { documentSnapShot->
                                 if(documentSnapShot.exists()){
                                         val bookmarkedArticles = documentSnapShot.get("bookmarkedArticles") as ArrayList<*>
                                         if(bookmarkedArticles.contains(articleId)){
-                                                userDocumentRef.update("bookmarkedArticles",FieldValue.arrayRemove(articleId))
-                                                        .addOnSuccessListener {
+                                                userDocumentRef?.update("bookmarkedArticles",FieldValue.arrayRemove(articleId))
+                                                        ?.addOnSuccessListener {
                                                                 holder.bookmarkArticleButton.setImageResource(R.drawable.baseline_bookmark_add_24)
                                                                 holder.bookmarkArticleButton.isEnabled = true
-                                                        }.addOnFailureListener {
+                                                        }?.addOnFailureListener {
                                                                 holder.bookmarkArticleButton.isEnabled = true
                                                         }
                                         }else{
-                                                userDocumentRef.update("bookmarkedArticles",FieldValue.arrayUnion(articleId))
-                                                        .addOnSuccessListener {
+                                                userDocumentRef?.update("bookmarkedArticles",FieldValue.arrayUnion(articleId))
+                                                        ?.addOnSuccessListener {
                                                                 holder.bookmarkArticleButton.setImageResource(R.drawable.baseline_bookmark_added_24)
                                                                 holder.bookmarkArticleButton.isEnabled = true
-                                                        }.addOnFailureListener{
+                                                        }?.addOnFailureListener{
                                                                 holder.bookmarkArticleButton.isEnabled = true
                                                         }
                                         }
                                 }else
                                         holder.bookmarkArticleButton.isEnabled = true
-                        }.addOnFailureListener {
+                        }?.addOnFailureListener {
                                 holder.bookmarkArticleButton.isEnabled = true
                         }
                 }
@@ -322,4 +339,5 @@ class ArticleAdapter(
                 }
 
         }
+
 }
