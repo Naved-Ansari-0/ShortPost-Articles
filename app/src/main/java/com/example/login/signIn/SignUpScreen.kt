@@ -2,6 +2,7 @@ package com.example.login.signIn
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.login.R
 import com.example.login.models.User
+import com.google.android.gms.common.util.SharedPreferencesUtils
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
@@ -88,7 +90,7 @@ class SignUpScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            signUpButton.isEnabled = false
+            disablesButtons()
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
@@ -129,31 +131,54 @@ class SignUpScreen : AppCompatActivity() {
                                         if (task.isSuccessful){
                                             Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
                                             SignInSignUpUtils.navigateToSignInScreen(this, this)
-                                            signUpButton.isEnabled = true
+                                            FirebaseAuth.getInstance().signOut()
+                                            enableButtons()
                                         }else{
                                             val errorCode = (task.exception as FirebaseAuthException).errorCode
                                             SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                                            signUpButton.isEnabled = true
+                                            FirebaseAuth.getInstance().signOut()
+                                            enableButtons()
                                         }
+                                        val sharedPreferences: SharedPreferences = this.getSharedPreferences("shared_pref", MODE_PRIVATE)
+                                        val editor = sharedPreferences.edit()
+                                        editor.putLong("lastTimeVerificationMailSent", System.currentTimeMillis())
+                                        editor.apply()
                                     }
                             }
                             .addOnFailureListener{
                                 val errorCode = (task.exception as FirebaseAuthException).errorCode
                                 SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                                signUpButton.isEnabled = true
+                                FirebaseAuth.getInstance().signOut()
+                                enableButtons()
                             }
                     } else {
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                        signUpButton.isEnabled = true
+                        FirebaseAuth.getInstance().signOut()
+                        enableButtons()
                     }
                 }
                 .addOnFailureListener {
-                    signUpButton.isEnabled = true
+                    FirebaseAuth.getInstance().signOut()
+                    enableButtons()
                 }
 
         }
 
+    }
+
+    private fun disablesButtons(){
+        signUpButton.isEnabled = false
+        forgotPwdButton.isEnabled = false
+        signInButton.isEnabled = false
+        skipButton.isEnabled = false
+    }
+
+    private fun enableButtons(){
+        signUpButton.isEnabled = true
+        forgotPwdButton.isEnabled = true
+        signInButton.isEnabled = true
+        skipButton.isEnabled = true
     }
 
     override fun onBackPressed() {

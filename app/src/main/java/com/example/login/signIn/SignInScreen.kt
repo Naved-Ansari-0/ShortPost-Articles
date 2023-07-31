@@ -2,12 +2,14 @@ package com.example.login.signIn
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.login.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.ktx.auth
@@ -66,53 +68,81 @@ class SignInScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            signInButton.isEnabled = false
+            disablesButtons()
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-
                         val user = auth.currentUser
-
                         if(!(user!!.isEmailVerified)){
                             Toast.makeText(this,"Email not verified, check your email inbox or spam folder.", Toast.LENGTH_LONG).show()
-
-                            user.sendEmailVerification()
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful){
-                                        Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
-                                        auth.signOut()
-                                        signInButton.isEnabled = true
-                                    }else{
-                                        val errorCode = (task.exception as FirebaseAuthException).errorCode
-                                        SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                                        auth.signOut()
-                                        signInButton.isEnabled = true
+                            val sharedPreferences : SharedPreferences = this.getSharedPreferences("shared_pref", MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            val lastTime = sharedPreferences.getLong("lastTimeVerificationMailSent", -1)
+                            val curTime = System.currentTimeMillis()
+                            if(lastTime.toInt() != -1 && curTime - lastTime<=60000){
+                                val snackbar = Snackbar.make(findViewById(android.R.id.content), "Verification link already sent less than a minute ago on your registered mail. If it is expired then try to login after one minute to sent new link.", Snackbar.LENGTH_LONG)
+                                val snackbarView = snackbar.view
+                                val textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+                                textView.maxLines = 5
+                                snackbar.show()
+                                FirebaseAuth.getInstance().signOut()
+                                enableButtons()
+                            }else{
+                                user.sendEmailVerification()
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful){
+                                            Toast.makeText(this, "Email verification link sent to $email", Toast.LENGTH_LONG).show()
+                                            FirebaseAuth.getInstance().signOut()
+                                            enableButtons()
+                                        }else{
+                                            val errorCode = (task.exception as FirebaseAuthException).errorCode
+                                            SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
+//                                            Toast.makeText(this, "We have already sent email verification link, if it is expired then try to login again after sometime to send new link.", Toast.LENGTH_LONG).show()
+                                            FirebaseAuth.getInstance().signOut()
+                                            enableButtons()
+                                        }
+                                        editor.putLong("lastTimeVerificationMailSent", System.currentTimeMillis())
+                                        editor.apply()
                                     }
-                                }
-                                .addOnFailureListener {
-                                    auth.signOut()
-                                    signInButton.isEnabled = true
-                                }
-                            auth.signOut()
+                                    .addOnFailureListener {
+                                        FirebaseAuth.getInstance().signOut()
+                                        enableButtons()
+                                    }
+                            }
                             return@addOnCompleteListener
                         }
                         SignInSignUpUtils.navigateToHomeScreen(this,this)
                     } else {
-
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                        signInButton.isEnabled = true
+                        FirebaseAuth.getInstance().signOut()
+                        enableButtons()
                     }
                 }
                 .addOnFailureListener {
-                    signInButton.isEnabled = true
+                    FirebaseAuth.getInstance().signOut()
+                    enableButtons()
                 }
 
         }
 
 
 
+    }
+
+    private fun disablesButtons(){
+        signUpButton.isEnabled = false
+        forgotPwdButton.isEnabled = false
+        signInButton.isEnabled = false
+        skipButton.isEnabled = false
+    }
+
+    private fun enableButtons(){
+        signUpButton.isEnabled = true
+        forgotPwdButton.isEnabled = true
+        signInButton.isEnabled = true
+        skipButton.isEnabled = true
     }
 
     override fun onBackPressed() {

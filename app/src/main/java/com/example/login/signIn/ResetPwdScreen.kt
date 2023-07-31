@@ -50,7 +50,7 @@ class ResetPwdScreen : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            resetPwdButton.isEnabled = false
+            disablesButtons()
 
             auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(this){ task ->
@@ -58,18 +58,30 @@ class ResetPwdScreen : AppCompatActivity() {
 
                         Toast.makeText(this, "Reset password link sent to $email", Toast.LENGTH_LONG).show()
                         SignInSignUpUtils.navigateToSignInScreen(this, this)
-                        resetPwdButton.isEnabled = true
+                        enableButtons()
                     }else{
 
                         val errorCode = (task.exception as FirebaseAuthException).errorCode
                         SignInSignUpUtils.firebaseExceptionToast(this, errorCode)
-                        resetPwdButton.isEnabled = true
+                        enableButtons()
                     }
                 }
                 .addOnFailureListener {
-                    resetPwdButton.isEnabled = true
+                    enableButtons()
                 }
         }
+    }
+
+    private fun disablesButtons(){
+        resetPwdButton.isEnabled = false
+        signInButton.isEnabled = false
+        skipButton.isEnabled = false
+    }
+
+    private fun enableButtons(){
+        resetPwdButton.isEnabled = true
+        signInButton.isEnabled = true
+        skipButton.isEnabled = true
     }
 
     override fun onBackPressed() {

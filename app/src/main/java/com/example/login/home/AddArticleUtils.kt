@@ -40,11 +40,11 @@ object AddArticleUtils {
     fun checkTitle(context: Context, title:String):Boolean{
         if(title=="")
             return true
-        val namePattern = Regex("^[a-zA-Z0-9@#\$%^&*()\\s\\-_+=!]+\$")
-        if(!namePattern.matches(title)){
-            Toast.makeText(context,"Invalid character in Title", Toast.LENGTH_SHORT).show()
-            return false
-        }
+//        val namePattern = Regex("^[a-zA-Z0-9@#\$%^&*(),\\s\\-_+=!]+\$")
+//        if(!namePattern.matches(title)){
+//            Toast.makeText(context,"Invalid character in Title", Toast.LENGTH_SHORT).show()
+//            return false
+//        }
         return true
     }
 

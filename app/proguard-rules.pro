@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.example.login.models.Article {
+    *;
+}
+-keep class com.example.login.models.User{
+*;
+}
+

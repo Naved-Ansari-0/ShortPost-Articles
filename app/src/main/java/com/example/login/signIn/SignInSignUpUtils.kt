@@ -123,7 +123,7 @@ object SignInSignUpUtils {
     }
 
     fun visitPrivacyPolicyLink(activity: Activity){
-        val url = "https://www.navedansari.in"
+        val url = "https://docs.google.com/document/d/1oLAQWpoyuGU4uC1tNVqeXW7Yfz24WpwIg2ugvp1gMjY/edit?usp=sharing"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         activity.startActivity(intent)
     }
